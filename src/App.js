@@ -25,7 +25,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route
-            path="/"
+            path="/home"
             element={
               isAuthenticated() ? <Home /> : <Navigate to="/login" replace />
             }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Login({ onLoginSuccess }) {
+function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -23,7 +23,6 @@ function Login({ onLoginSuccess }) {
         if (data.token) {
           // Save token in cookies
           document.cookie = `authorization=${data.token}`;
-          onLoginSuccess();
           navigate("/home");
         }
       } else {
