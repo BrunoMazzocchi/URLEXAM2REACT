@@ -24,12 +24,7 @@ function App() {
       <div>
         <Navbar />
         <Routes>
-          <Route
-            path="/home"
-            element={
-              isAuthenticated() ? <Home /> : <Navigate to="/login" replace />
-            }
-          />
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route
             path="/signup"

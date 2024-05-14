@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MediaCard from "./components/mediaCard";
+import "./css/Home.css";
 import ImageModel from "./models/imageModel";
 
 function Home() {

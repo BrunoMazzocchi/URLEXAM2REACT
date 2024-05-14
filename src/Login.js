@@ -23,7 +23,7 @@ function Login() {
         if (data.token) {
           // Save token in cookies
           document.cookie = `authorization=${data.token}`;
-          navigate("/home");
+          navigate("/");
         }
       } else {
         // Handle other status codes
