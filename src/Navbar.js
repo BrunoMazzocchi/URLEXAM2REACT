@@ -54,7 +54,10 @@ function Navbar() {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav
+      className="navbar navbar-expand-lg navbar-dark bg-dark"
+      style={{ padding: "10px 20px" }}
+    >
       <Link className="navbar-brand" to="/">
         Mi Lienzo APP
       </Link>

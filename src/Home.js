@@ -37,35 +37,33 @@ function Home() {
         if (response.ok) {
           const data = await response.json();
 
-          // Use a Set to keep track of unique IDs
+          // Use a Set to keep track of unique IDs and filter duplicates
           const uniqueIds = new Set();
-
-          // Filter out duplicates and update state
-          setImageData((prevImageData) => {
-            const newData = data.filter((post) => {
-              if (!uniqueIds.has(post.id.id)) {
-                uniqueIds.add(post.id.id);
-                return true;
-              }
-              return false;
-            });
-            return [
-              ...prevImageData,
-              ...newData.map((post) => {
-                return new ImageModel(
-                  post.id.id,
-                  post.id.title,
-                  post.id.content,
-                  post.id.image,
-                  post.id.description,
-                  post.id.userId,
-                  post.id.state,
-                  post.id.createdAt,
-                  post.id.lastUpdated
-                );
-              }),
-            ];
+          const uniqueData = data.filter((post) => {
+            if (!uniqueIds.has(post.id.id)) {
+              uniqueIds.add(post.id.id);
+              return true;
+            }
+            return false;
           });
+
+          // Update state with unique data
+          const imageModels = uniqueData.map(
+            (post) =>
+              new ImageModel(
+                post.id.id,
+                post.id.title,
+                post.id.content,
+                post.id.image,
+                post.id.description,
+                post.id.userId,
+                post.id.state,
+                post.id.createdAt,
+                post.id.lastUpdated
+              )
+          );
+
+          setImageData(imageModels);
         } else {
           console.error("Failed to fetch image data");
         }
