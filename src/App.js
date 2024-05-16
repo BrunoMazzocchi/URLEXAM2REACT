@@ -1,4 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
+
 import React from "react";
 import {
   Navigate,
@@ -12,11 +13,7 @@ import Login from "./Login";
 import Navbar from "./Navbar";
 import Signup from "./Signup";
 
-const isAuthenticated = () => {
-  const authenticationCookie = document.cookie.includes("authorization");
-  const expirationDateValid = true;
-  return authenticationCookie && expirationDateValid;
-};
+const isAuthenticated = () => document.cookie.includes("authorization");
 
 function App() {
   return (
@@ -24,14 +21,14 @@ function App() {
       <div>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
           <Route
-            path="/signup"
+            path="/"
             element={
-              isAuthenticated() ? <Signup /> : <Navigate to="/login" replace />
+              isAuthenticated() ? <Home /> : <Navigate to="/login" replace />
             }
           />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route
             path="/canvas"
             element={
