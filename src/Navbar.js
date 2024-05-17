@@ -21,19 +21,17 @@ function Navbar() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // Include token in the header
           Authorization: `${token}`,
         },
       });
 
       if (response.ok) {
-        // Clear cookies
+        // Clear the cookie
         document.cookie =
           "authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         // Redirect to login page after successful logout
         navigate("/login");
       } else {
-        // Show error dialog if logout request fails
         alert("Error logging out. Please try again.");
       }
     } catch (error) {

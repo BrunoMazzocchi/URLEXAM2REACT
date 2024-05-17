@@ -2,10 +2,26 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
+
+  const [imageData, setImageData] = useState([]);
+  const isAuthenticated = () => {
+    const cookies = document.cookie.split(";");
+    for (let cookie of cookies) {
+      const [name, value] = cookie.trim().split("=");
+      if (name === "authorization" && value) {
+        navigate("/");
+        return true;
+      }
+    }
+
+    navigate("/login");
+    return false;
+  };
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,11 +38,10 @@ function Login() {
         const data = await response.json();
         if (data.token) {
           // Save token in cookies
-          document.cookie = `authorization=${data.token}`;
+          document.cookie = `authorization=${data.token}; path=/`;
           navigate("/");
         }
       } else {
-        // Handle other status codes
         let errorMessage = "Error de servidor";
         if (response.status === 401) {
           errorMessage = "Credenciales inválidas";

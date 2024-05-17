@@ -3,8 +3,28 @@ import MediaCard from "./components/mediaCard";
 import "./css/Home.css";
 import ImageModel from "./models/imageModel";
 
+import { useNavigate } from "react-router-dom";
+
 function Home() {
+  const navigate = useNavigate();
+
   const [imageData, setImageData] = useState([]);
+  const isAuthenticated = () => {
+    const cookies = document.cookie.split(";");
+    for (let cookie of cookies) {
+      const [name, value] = cookie.trim().split("=");
+      if (name === "authorization" && value) {
+        return true;
+      }
+    }
+
+    navigate("/login");
+    return false;
+  };
+
+  useEffect(() => {
+    isAuthenticated();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,7 +93,7 @@ function Home() {
     };
 
     fetchData();
-  }, []); // Empty dependency array ensures the effect runs only once after the initial render
+  }, []);
 
   return (
     <div className="container mt-5">

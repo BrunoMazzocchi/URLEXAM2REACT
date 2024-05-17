@@ -15,6 +15,23 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Canvas = () => {
+  const isAuthenticated = () => {
+    const cookies = document.cookie.split(";");
+    for (let cookie of cookies) {
+      const [name, value] = cookie.trim().split("=");
+      if (name === "authorization" && value) {
+        return true;
+      }
+    }
+
+    navigate("/login");
+    return false;
+  };
+
+  useEffect(() => {
+    isAuthenticated();
+  }, []);
+
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [penColor, setPenColor] = useState("#000000");
@@ -22,8 +39,8 @@ const Canvas = () => {
   const [eraserSize, setEraserSize] = useState(10);
   const [mode, setMode] = useState("pen");
   const [open, setOpen] = useState(false);
-  const [errorOpen, setErrorOpen] = useState(false); // State for error dialog
-  const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const [errorOpen, setErrorOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [description, setDescription] = useState("");
@@ -34,12 +51,24 @@ const Canvas = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
-    canvas.width = window.innerWidth * 0.8;
-    canvas.height = window.innerHeight * 0.8;
-    context.lineCap = "round";
-    context.fillStyle = "#FFFFFF";
-    context.fillRect(0, 0, canvas.width, canvas.height);
-    saveToHistory();
+
+    const resizeCanvas = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+      context.lineCap = "round";
+      context.fillStyle = "#FFFFFF";
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      saveToHistory();
+    };
+
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    return () => {
+      window.removeEventListener("resize", resizeCanvas);
+    };
   }, []);
 
   const startDrawing = (e) => {
@@ -147,13 +176,13 @@ const Canvas = () => {
 
   return (
     <div>
-      <Paper>
+      <Paper style={{ width: "100%", height: "100vh" }}>
         <canvas
           ref={canvasRef}
           onMouseDown={startDrawing}
           onMouseUp={stopDrawing}
           onMouseMove={draw}
-          style={{ border: "1px solid #000" }}
+          style={{ border: "1px solid #000", width: "100%", height: "100%" }}
         />
       </Paper>
       <div style={{ marginTop: "10px" }}>
